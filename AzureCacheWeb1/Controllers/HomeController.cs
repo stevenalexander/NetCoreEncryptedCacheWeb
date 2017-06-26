@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using AzureCacheWeb1.Helpers;
 using AzureCacheWeb1.Models;
+using System.Threading.Tasks;
+using AzureCacheWeb1.Session;
 
 namespace AzureCacheWeb1.Controllers
 {
@@ -14,17 +15,17 @@ namespace AzureCacheWeb1.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            ViewData["data"] = _sessionBag.GetData();
+            ViewData["data"] = await _sessionBag.GetData();
 
             return View();
         }
 
         [HttpPost]
-        public IActionResult Index(HomeViewModel vm)
+        public async Task<IActionResult> Index(HomeViewModel vm)
         {
-            _sessionBag.SetData(vm.plaintext);
+            await _sessionBag.SetData(vm.plaintext);
 
             return Redirect("/");
         }

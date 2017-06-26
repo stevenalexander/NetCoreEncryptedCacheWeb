@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using AzureCacheWeb1.Helpers;
+using AzureCacheWeb1.Session;
 
 namespace AzureCacheWeb1
 {
@@ -43,6 +44,7 @@ namespace AzureCacheWeb1
             }
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IVaultHelper>(new VaultHelper(Configuration["SiteSettings:VaultUrl"], Configuration["SiteSettings:ClientId"], Configuration["SiteSettings:ClientSecret"]));
             services.AddSingleton<ISessionBag, EnvelopeEncryptionSessionBag>();
 
             services.AddSession(options => {
