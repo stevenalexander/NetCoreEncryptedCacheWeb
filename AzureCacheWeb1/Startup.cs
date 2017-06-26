@@ -27,6 +27,18 @@ namespace AzureCacheWeb1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDistributedRedisCache(options => {
+                options.Configuration = "...";
+                options.InstanceName = "master";
+            });
+
+            // services.AddDistributedMemoryCache();
+
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
+                options.CookieHttpOnly = true;
+            });
+
             // Add framework services.
             services.AddMvc();
         }
@@ -48,7 +60,7 @@ namespace AzureCacheWeb1
             }
 
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
