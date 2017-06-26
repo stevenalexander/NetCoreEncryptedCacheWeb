@@ -27,10 +27,18 @@ namespace AzureCacheWeb1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDistributedRedisCache(options => {
-                options.Configuration = Configuration["SiteSettings:RedisConnectionString"];
-                options.InstanceName = "";
-            });
+            if (!string.IsNullOrEmpty(Configuration["SiteSettings:RedisConnectionString"]))
+            {
+                services.AddDistributedRedisCache(options =>
+                {
+                    options.Configuration = Configuration["SiteSettings:RedisConnectionString"];
+                    options.InstanceName = "";
+                });
+            }
+            else
+            {
+                services.AddDistributedMemoryCache();
+            }
 
             // services.AddDistributedMemoryCache();
 
