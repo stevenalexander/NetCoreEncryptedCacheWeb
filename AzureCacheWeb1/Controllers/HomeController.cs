@@ -4,34 +4,35 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Distributed;
+using System.Text;
 
 namespace AzureCacheWeb1.Controllers
 {
     public class HomeController : Controller
     {
-        private IDistributedCache _cache;
-
-        public HomeController(IDistributedCache cache)
-        {
-            _cache = cache;
-        }
-
         public IActionResult Index()
         {
-            _cache.SetString("name", "test");
-            string value = _cache.GetString("CacheTime");
+            var bytes = Encoding.UTF8.GetBytes("World");
+            HttpContext.Session.Set("Hello", bytes);
 
-            if (value == null)
-            {
-                value = DateTime.Now.ToString();
+            var bytesOut = default(byte[]);
+            HttpContext.Session.TryGetValue("Hello", out bytesOut);
+            var content = Encoding.UTF8.GetString(bytesOut);
+            ViewData["Hello"] = content;
 
-                var options = new DistributedCacheEntryOptions();
-                options.SetSlidingExpiration(TimeSpan.FromMinutes(1));
-                _cache.SetString("CacheTime", value, options);
-            }
-            ViewData["CacheTime"] = value;
-            ViewData["CurrentTime"] = DateTime.Now.ToString();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Submit()
+        {
+            var bytes = Encoding.UTF8.GetBytes("World");
+            HttpContext.Session.Set("Hello", bytes);
+
+            var bytesOut = default(byte[]);
+            HttpContext.Session.TryGetValue("Hello", out bytesOut);
+            var content = Encoding.UTF8.GetString(bytesOut);
+            ViewData["Hello"] = content;
 
             return View();
         }
