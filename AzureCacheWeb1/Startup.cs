@@ -28,8 +28,8 @@ namespace AzureCacheWeb1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDistributedRedisCache(options => {
-                options.Configuration = "...";
-                options.InstanceName = "master";
+                options.Configuration = Configuration["SiteSettings:RedisConnectionString"];
+                options.InstanceName = "";
             });
 
             // services.AddDistributedMemoryCache();
