@@ -5,5 +5,13 @@
 <h1>Azure Cache</h1>
 
 <div>
-    Value read from cache is: @ViewData["Hello"]
+    Value read from cache is: @ViewData["data"]
 </div>
+
+<form method="post">
+    <div class="form-group">
+        <label for="plaintext">Plaintext</label>
+        <input type="text" id="plaintext" name="plaintext" class="form-control" required autofocus>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>

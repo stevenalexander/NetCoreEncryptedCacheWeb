@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using AzureCacheWeb1.Helpers;
 
 namespace AzureCacheWeb1
 {
@@ -40,7 +42,8 @@ namespace AzureCacheWeb1
                 services.AddDistributedMemoryCache();
             }
 
-            // services.AddDistributedMemoryCache();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<ISessionBag, EnvelopeEncryptionSessionBag>();
 
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(60);
